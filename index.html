@@ -9,8 +9,10 @@
 </head>
 <body>
   <header class="brand">
-    <h1>Depot</h1>
-    <p>Interaktive Finanz-Übersicht — Farbstil angelehnt an scalable.capital</p>
+    <div class="brand-inner">
+      <h1>Depot</h1>
+      <p>Interaktive Finanz-Übersicht — Farben angepasst</p>
+    </div>
   </header>
 
   <main>
@@ -46,23 +48,28 @@
       </form>
 
       <h3>Schnellpreise</h3>
-      <p>Für Kryptowährungen werden aktuelle Preise automatisch von CoinGecko abgefragt. Für andere Assets kannst du einen aktuellen Preis manuell eintragen oder einen Versuch mit Yahoo-Finance starten (kann wegen CORS variieren).</p>
+      <p>Crypto-Preise: CoinGecko. Aktien/ETFs/Metalle: Versuch über Yahoo (kann CORS haben). Die App speichert historische Schnappschüsse, wenn du "Aktuelle Preise holen" klickst — so entstehen Zeitreihen für Diagramme.</p>
     </section>
 
     <section class="portfolio-section">
       <h2>Portfolio</h2>
       <div class="controls">
         <button id="fetchPrices" class="btn">Aktuelle Preise holen</button>
+        <label>Zeige Verlauf für
+          <select id="historySelect"><option value="portfolio">Gesamtportfolio</option></select>
+        </label>
       </div>
       <div class="charts">
         <canvas id="allocationChart"></canvas>
         <canvas id="pnlChart"></canvas>
+        <canvas id="historyChart"></canvas>
+        <canvas id="compareChart"></canvas>
       </div>
 
       <h3>Holdings</h3>
       <table id="holdingsTable">
         <thead>
-          <tr><th>Typ</th><th>Name/Ticker</th><th>Menge</th><th>Kaufpreis</th><th>Aktuell</th><th>P/L EUR</th><th></th></tr>
+          <tr><th>Typ</th><th>Name/Ticker</th><th>Menge</th><th>Kaufpreis</th><th>Aktuell</th><th>Wert</th><th>P/L EUR</th><th></th></tr>
         </thead>
         <tbody></tbody>
       </table>

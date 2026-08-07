@@ -1,21 +1,16 @@
-# Depot — interaktive Demo
+# Depot — interaktive Demo (aktualisiert)
 
-Dieses Repository enthält eine einfache statische Frontend-Demo einer "Depot"-Web-App.
+Änderungen gegenüber der ersten Version:
+- Dunkles Theme mit mint-accent Farben (an dein Bild angelehnt).
+- Korrigierte Preis-/Wertberechnung: currentPrice wird als Preis pro Einheit behandelt; P/L und Wert berechnet als currentPrice * quantity.
+- History: beim Klick auf "Aktuelle Preise holen" werden Snapshots gespeichert; daraus entsteht eine Zeitreihe (Portfolio-Wert) für das Verlaufschart.
+- Zusätzliche Diagramme: Portfolio-Verlauf (line) und ein Scatter/Bubble-Plot, der Kaufpreis vs. aktueller Preis pro Einheit vergleicht.
+- Verbesserte CoinGecko-Integration: die Coins-Liste wird einmal geladen, um Name/Symbol besser auf CoinGecko-IDs zu mappen.
 
-Funktionen:
-- Einfache Eingabe von Käufen (Kryptos, Aktien, Gold, Silber, Kupfer, ETFs)
-- Speicherung im Browser (localStorage)
-- Automatische Preisabfrage für Kryptowährungen via CoinGecko
-- Versuche, Aktien/ETFs/Metalle über einen Yahoo-Finance-Endpunkt (via allorigins Proxy) abzurufen (kann wegen CORS fehlschlagen)
-- Grafische Darstellung (Chart.js) der Portfolio-Allokation und Gewinn/Verlust
-- Tagesgeld-Rechner mit Reinvestitionsoption
+Nutzung:
+1. Öffne `index.html` lokal oder hoste via GitHub Pages (siehe vorherige Commit-Nachricht / Actions Workflow).
+2. Trage Käufe ein. Klicke "Aktuelle Preise holen" — dann werden crypto/aktien/rohstoffpreise versucht und ein Snapshot für die Zeitreihe angelegt.
 
-Anleitung:
-1. Öffne `index.html` in einem Browser (lokal oder gehostet). 
-2. Füge Einträge hinzu, klicke "Aktuelle Preise holen" um verfügbare Preise zu aktualisieren.
-
-Hinweise / Erweiterungen:
-- Für zuverlässige Aktien- / Rohstoffpreise empfiehlt es sich, einen eigenen Backend-Proxy oder API-Key-gestützte Service (z.B. AlphaVantage, Finnhub, Metals-API) zu integrieren.
-- Styling ist angelehnt an die Farben von scalable.capital.
-
-Viel Spaß — ich kann das weiter ausbauen (z.B. CSV-Import/Export, historische Kurse, Performance über Zeit, Auth/Accounts, Hosting-Konfiguration).
+Hinweise:
+- Aktien-/Metallpreise sind weiterhin "best-effort" über einen öffentlichen Proxy; für Produktionsverwendung bitte ein eigenes Backend/API verwenden.
+- Wenn du willst, kann ich ein kurzes Node/Express-Proxy-Backend hinzufügen und eine Anleitung geben, wie du einen (kostenlosen) API-Key (z. B. Finnhub) konfigurierst.
