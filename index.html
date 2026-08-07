@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Depot — interaktive Finanz-Website</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="brand">
+    <h1>Depot</h1>
+    <p>Interaktive Finanz-Übersicht — Farbstil angelehnt an scalable.capital</p>
+  </header>
+
+  <main>
+    <section class="input-section">
+      <h2>Neuen Kauf hinzufügen</h2>
+      <form id="buyForm">
+        <label>Asset-Typ
+          <select id="assetType">
+            <option value="crypto">Kryptowährung</option>
+            <option value="stock">Aktie</option>
+            <option value="gold">Gold</option>
+            <option value="silver">Silber</option>
+            <option value="copper">Kupfer</option>
+            <option value="etf">ETF</option>
+          </select>
+        </label>
+        <label>Name / Ticker
+          <input id="assetName" placeholder="z.B. bitcoin oder AAPL" required />
+        </label>
+        <label>Kaufdatum
+          <input id="buyDate" type="date" required />
+        </label>
+        <label>Menge (Stück / Einheit)
+          <input id="quantity" type="number" step="any" min="0" required />
+        </label>
+        <label>Kaufpreis pro Einheit (in EUR)
+          <input id="buyPrice" type="number" step="any" min="0" required />
+        </label>
+        <div class="actions">
+          <button type="submit" class="btn primary">Hinzufügen</button>
+          <button type="button" id="clearAll" class="btn">Alle löschen</button>
+        </div>
+      </form>
+
+      <h3>Schnellpreise</h3>
+      <p>Für Kryptowährungen werden aktuelle Preise automatisch von CoinGecko abgefragt. Für andere Assets kannst du einen aktuellen Preis manuell eintragen oder einen Versuch mit Yahoo-Finance starten (kann wegen CORS variieren).</p>
+    </section>
+
+    <section class="portfolio-section">
+      <h2>Portfolio</h2>
+      <div class="controls">
+        <button id="fetchPrices" class="btn">Aktuelle Preise holen</button>
+      </div>
+      <div class="charts">
+        <canvas id="allocationChart"></canvas>
+        <canvas id="pnlChart"></canvas>
+      </div>
+
+      <h3>Holdings</h3>
+      <table id="holdingsTable">
+        <thead>
+          <tr><th>Typ</th><th>Name/Ticker</th><th>Menge</th><th>Kaufpreis</th><th>Aktuell</th><th>P/L EUR</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="savings-section">
+      <h2>Tagesgeld-Rechner</h2>
+      <form id="savingsForm">
+        <label>Anfangsbetrag (EUR)
+          <input id="principal" type="number" step="any" min="0" value="1000" required />
+        </label>
+        <label>Zinssatz p.a. (%)
+          <input id="rate" type="number" step="any" min="0" value="1.5" required />
+        </label>
+        <label>Laufzeit (Jahre)
+          <input id="years" type="number" step="any" min="0" value="1" required />
+        </label>
+        <label>Auszahlung
+          <select id="payoutFreq">
+            <option value="none">Keine (Ende)</option>
+            <option value="yearly">jährlich</option>
+            <option value="monthly">monatlich</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" id="reinvest" /> Auszahlungen weiter verzinsen (Wiederanlage)
+        </label>
+        <div class="actions">
+          <button class="btn primary" type="submit">Berechne</button>
+        </div>
+      </form>
+      <div id="savingsResult" class="result"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Demo-App • Daten lokal gespeichert im Browser • Quellen: CoinGecko (Crypto-Preise)</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
