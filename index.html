@@ -1,114 +1,633 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Depot — interaktive Finanz-Website</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0b0b">
+  <title>Depot — Finanz Dashboard</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <header class="brand">
-    <div class="brand-inner">
-      <h1>Depot</h1>
-      <p>Interaktive Finanz-Übersicht — Farben angepasst</p>
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+    <div class="logo-area">
+      <div class="logo-mark">D</div>
+      <div>
+        <h1>Depot</h1>
+        <span>PRIVATE FINANCE DASHBOARD</span>
+      </div>
     </div>
-  </header>
 
-  <main>
-    <section class="input-section">
-      <h2>Neuen Kauf hinzufügen</h2>
-      <form id="buyForm">
-        <label>Asset-Typ
-          <select id="assetType">
-            <option value="crypto">Kryptowährung</option>
-            <option value="stock">Aktie</option>
-            <option value="gold">Gold</option>
-            <option value="silver">Silber</option>
-            <option value="copper">Kupfer</option>
-            <option value="etf">ETF</option>
+    <div class="market-status">
+      <span id="marketDot"></span>
+      <span id="marketStatus">Marktdaten werden geladen…</span>
+      <small id="lastUpdate">—</small>
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+  <!-- =====================================================
+       MARKET OVERVIEW
+  ====================================================== -->
+
+  <section class="market-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">MARKTÜBERSICHT</span>
+        <h2>Aktuelle Märkte</h2>
+      </div>
+
+      <button id="refreshMarkets" class="btn primary">
+        ↻ Aktualisieren
+      </button>
+    </div>
+
+    <div class="market-grid">
+
+      <article class="market-card gold-card">
+        <div class="market-card-top">
+          <span class="market-icon">Au</span>
+          <span class="live-badge">LIVE</span>
+        </div>
+
+        <div class="market-name">Gold</div>
+
+        <div class="market-price" id="goldPrice">—</div>
+
+        <div class="market-meta">
+          EUR / Troy Ounce
+        </div>
+
+        <div class="market-change" id="goldChange">—</div>
+      </article>
+
+
+      <article class="market-card silver-card">
+        <div class="market-card-top">
+          <span class="market-icon">Ag</span>
+          <span class="live-badge">LIVE</span>
+        </div>
+
+        <div class="market-name">Silber</div>
+
+        <div class="market-price" id="silverPrice">—</div>
+
+        <div class="market-meta">
+          EUR / Troy Ounce
+        </div>
+
+        <div class="market-change" id="silverChange">—</div>
+      </article>
+
+
+      <article class="market-card">
+        <div class="market-card-top">
+          <span class="market-icon">€</span>
+          <span class="live-badge">FX</span>
+        </div>
+
+        <div class="market-name">EUR / USD</div>
+
+        <div class="market-price" id="eurusdPrice">—</div>
+
+        <div class="market-meta">
+          Wechselkurs
+        </div>
+
+        <div class="market-change" id="eurusdChange">—</div>
+      </article>
+
+
+      <article class="market-card portfolio-market-card">
+        <div class="market-card-top">
+          <span class="market-icon">Σ</span>
+          <span class="live-badge">DEPOT</span>
+        </div>
+
+        <div class="market-name">Depotwert</div>
+
+        <div class="market-price" id="dashboardTotal">—</div>
+
+        <div class="market-meta">
+          Aktueller Gesamtwert
+        </div>
+
+        <div class="market-change" id="dashboardPnl">—</div>
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PORTFOLIO KPI
+  ====================================================== -->
+
+  <section class="overview-grid">
+
+    <div class="overview-card">
+      <span>DEPOTWERT</span>
+      <strong id="totalValue">—</strong>
+      <small>Aktueller Wert</small>
+    </div>
+
+    <div class="overview-card">
+      <span>INVESTIERT</span>
+      <strong id="investedValue">—</strong>
+      <small>Einstandswert</small>
+    </div>
+
+    <div class="overview-card">
+      <span>GEWINN / VERLUST</span>
+      <strong id="totalPnl">—</strong>
+      <small>Gesamte Entwicklung</small>
+    </div>
+
+    <div class="overview-card">
+      <span>RENDITE</span>
+      <strong id="totalReturn">—</strong>
+      <small>Seit Kauf</small>
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PERFORMANCE
+  ====================================================== -->
+
+  <section class="performance-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">PERFORMANCE</span>
+        <h2>Deine Entwicklung</h2>
+      </div>
+    </div>
+
+    <div class="performance-grid">
+
+      <div class="performance-card">
+        <span>HEUTE</span>
+        <strong id="perfDay">—</strong>
+      </div>
+
+      <div class="performance-card">
+        <span>1 WOCHE</span>
+        <strong id="perfWeek">—</strong>
+      </div>
+
+      <div class="performance-card">
+        <span>1 MONAT</span>
+        <strong id="perfMonth">—</strong>
+      </div>
+
+      <div class="performance-card">
+        <span>1 JAHR</span>
+        <strong id="perfYear">—</strong>
+      </div>
+
+      <div class="performance-card">
+        <span>MAXIMAL</span>
+        <strong id="perfMax">—</strong>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       DEPOT
+  ====================================================== -->
+
+  <section class="portfolio-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">PORTFOLIO</span>
+        <h2>Meine Anlagen</h2>
+      </div>
+
+      <div class="section-actions">
+
+        <label class="select-label">
+          Verlauf
+          <select id="historySelect">
+            <option value="portfolio">Gesamtportfolio</option>
           </select>
         </label>
-        <label>Name / Ticker
-          <input id="assetName" placeholder="z.B. bitcoin oder AAPL" required />
-        </label>
-        <label>Kaufdatum
-          <input id="buyDate" type="date" required />
-        </label>
-        <label>Menge (Stück / Einheit)
-          <input id="quantity" type="number" step="any" min="0" required />
-        </label>
-        <label>Kaufpreis pro Einheit (in EUR)
-          <input id="buyPrice" type="number" step="any" min="0" required />
-        </label>
-        <div class="actions">
-          <button type="submit" class="btn primary">Hinzufügen</button>
-          <button type="button" id="clearAll" class="btn">Alle löschen</button>
+
+        <button id="fetchPrices" class="btn">
+          ↻ Kurse holen
+        </button>
+
+        <button id="clearAll" class="btn danger">
+          Alles löschen
+        </button>
+
+      </div>
+    </div>
+
+
+    <div class="charts">
+
+      <div class="chart-card chart-large">
+        <div class="chart-header">
+          <div>
+            <span class="chart-kicker">VERMÖGEN</span>
+            <h3>Portfolioentwicklung</h3>
+          </div>
+
+          <span class="chart-live">LIVE</span>
         </div>
-      </form>
 
-      <h3>Schnellpreise</h3>
-      <p>Crypto-Preise: CoinGecko. Aktien/ETFs/Metalle: Versuch über Yahoo (kann CORS haben). Die App speichert historische Schnappschüsse, wenn du "Aktuelle Preise holen" klickst — so entstehen Zeitreihen für Diagramme.</p>
-    </section>
-
-    <section class="portfolio-section">
-      <h2>Portfolio</h2>
-      <div class="controls">
-        <button id="fetchPrices" class="btn">Aktuelle Preise holen</button>
-        <label>Zeige Verlauf für
-          <select id="historySelect"><option value="portfolio">Gesamtportfolio</option></select>
-        </label>
-      </div>
-      <div class="charts">
-        <canvas id="allocationChart"></canvas>
-        <canvas id="pnlChart"></canvas>
-        <canvas id="historyChart"></canvas>
-        <canvas id="compareChart"></canvas>
+        <div class="chart-container">
+          <canvas id="historyChart"></canvas>
+        </div>
       </div>
 
-      <h3>Holdings</h3>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <span class="chart-kicker">ALLOCATION</span>
+            <h3>Aufteilung</h3>
+          </div>
+        </div>
+
+        <div class="chart-container small-chart">
+          <canvas id="allocationChart"></canvas>
+        </div>
+      </div>
+
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <span class="chart-kicker">PERFORMANCE</span>
+            <h3>Gewinn / Verlust</h3>
+          </div>
+        </div>
+
+        <div class="chart-container small-chart">
+          <canvas id="pnlChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- Holdings -->
+
+    <div class="holdings-header">
+      <div>
+        <span class="eyebrow">BESTÄNDE</span>
+        <h3>Meine Positionen</h3>
+      </div>
+
+      <span id="holdingCount">0 Positionen</span>
+    </div>
+
+    <div class="table-wrapper">
+
       <table id="holdingsTable">
-        <thead>
-          <tr><th>Typ</th><th>Name/Ticker</th><th>Menge</th><th>Kaufpreis</th><th>Aktuell</th><th>Wert</th><th>P/L EUR</th><th></th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
 
-    <section class="savings-section">
-      <h2>Tagesgeld-Rechner</h2>
-      <form id="savingsForm">
-        <label>Anfangsbetrag (EUR)
-          <input id="principal" type="number" step="any" min="0" value="1000" required />
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Menge</th>
+            <th>Einstand</th>
+            <th>Aktuell</th>
+            <th>Wert</th>
+            <th>Gewinn / Verlust</th>
+            <th>Rendite</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ADD POSITION
+  ====================================================== -->
+
+  <section class="input-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">DEPOT ERWEITERN</span>
+        <h2>Neuen Kauf hinzufügen</h2>
+      </div>
+    </div>
+
+
+    <form id="buyForm" class="form-grid">
+
+      <label>
+        Asset-Typ
+
+        <select id="assetType">
+          <option value="stock">Aktie</option>
+          <option value="etf">ETF</option>
+          <option value="crypto">Kryptowährung</option>
+          <option value="gold">Gold</option>
+          <option value="silver">Silber</option>
+          <option value="copper">Kupfer</option>
+        </select>
+      </label>
+
+
+      <label>
+        Name / Ticker
+
+        <input
+          id="assetName"
+          placeholder="z. B. AAPL, SAP.DE, BTC"
+          required
+        >
+      </label>
+
+
+      <label>
+        Kaufdatum
+
+        <input
+          id="buyDate"
+          type="date"
+          required
+        >
+      </label>
+
+
+      <label>
+        Menge
+
+        <input
+          id="quantity"
+          type="number"
+          step="any"
+          min="0"
+          placeholder="10"
+          required
+        >
+      </label>
+
+
+      <label>
+        Kaufpreis pro Einheit (€)
+
+        <input
+          id="buyPrice"
+          type="number"
+          step="any"
+          min="0"
+          placeholder="100"
+          required
+        >
+      </label>
+
+
+      <div class="form-submit">
+        <button type="submit" class="btn primary">
+          + Position hinzufügen
+        </button>
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- =====================================================
+       INTEREST TARGET CALCULATOR
+  ====================================================== -->
+
+  <section class="interest-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">ZINSEN</span>
+        <h2>Wie viel Kapital brauche ich?</h2>
+
+        <p>
+          Gib ein, wie viel Zinsen du pro Jahr erhalten möchtest
+          und welchen Zinssatz du bekommst.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="interest-layout">
+
+      <form id="targetInterestForm" class="interest-form">
+
+        <label>
+          Gewünschte Zinsen pro Jahr (€)
+
+          <input
+            id="targetInterest"
+            type="number"
+            min="0"
+            step="any"
+            value="1000"
+            required
+          >
         </label>
-        <label>Zinssatz p.a. (%)
-          <input id="rate" type="number" step="any" min="0" value="1.5" required />
+
+
+        <label>
+          Zinssatz p.a. (%)
+
+          <input
+            id="targetRate"
+            type="number"
+            min="0"
+            step="any"
+            value="3"
+            required
+          >
         </label>
-        <label>Laufzeit (Jahre)
-          <input id="years" type="number" step="any" min="0" value="1" required />
-        </label>
-        <label>Auszahlung
-          <select id="payoutFreq">
-            <option value="none">Keine (Ende)</option>
-            <option value="yearly">jährlich</option>
-            <option value="monthly">monatlich</option>
+
+
+        <label>
+          Zinsgutschrift
+
+          <select id="interestFrequency">
+            <option value="1">jährlich</option>
+            <option value="12">monatlich</option>
+            <option value="4">vierteljährlich</option>
           </select>
         </label>
-        <label>
-          <input type="checkbox" id="reinvest" /> Auszahlungen weiter verzinsen (Wiederanlage)
-        </label>
-        <div class="actions">
-          <button class="btn primary" type="submit">Berechne</button>
-        </div>
+
+
+        <button class="btn primary" type="submit">
+          Kapital berechnen
+        </button>
+
       </form>
-      <div id="savingsResult" class="result"></div>
-    </section>
-  </main>
 
-  <footer>
-    <p>Demo-App • Daten lokal gespeichert im Browser • Quellen: CoinGecko (Crypto-Preise)</p>
-  </footer>
 
-  <script src="app.js"></script>
+      <div id="targetInterestResult" class="interest-result">
+
+        <span>BENÖTIGTES KAPITAL</span>
+
+        <strong>—</strong>
+
+        <p>
+          Trage Ziel-Zinsen und Zinssatz ein.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SAVINGS CALCULATOR
+  ====================================================== -->
+
+  <section class="savings-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">RECHNER</span>
+        <h2>Zinseszins-Rechner</h2>
+      </div>
+    </div>
+
+
+    <form id="savingsForm" class="form-grid">
+
+      <label>
+        Anfangskapital (€)
+
+        <input
+          id="principal"
+          type="number"
+          min="0"
+          step="any"
+          value="1000"
+          required
+        >
+      </label>
+
+
+      <label>
+        Zinssatz p.a. (%)
+
+        <input
+          id="rate"
+          type="number"
+          min="0"
+          step="any"
+          value="3"
+          required
+        >
+      </label>
+
+
+      <label>
+        Laufzeit (Jahre)
+
+        <input
+          id="years"
+          type="number"
+          min="0"
+          step="any"
+          value="10"
+          required
+        >
+      </label>
+
+
+      <label>
+        Verzinsung
+
+        <select id="payoutFreq">
+          <option value="12">monatlich</option>
+          <option value="4">vierteljährlich</option>
+          <option value="1">jährlich</option>
+        </select>
+      </label>
+
+
+      <div class="checkbox-row">
+
+        <input
+          type="checkbox"
+          id="reinvest"
+          checked
+        >
+
+        <label for="reinvest">
+          Zinsen wieder anlegen
+        </label>
+
+      </div>
+
+
+      <div class="form-submit">
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          Berechnen
+        </button>
+
+      </div>
+
+    </form>
+
+
+    <div
+      id="savingsResult"
+      class="result"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <div>
+    <strong>DEPOT</strong>
+    <span>Private Finance Dashboard</span>
+  </div>
+
+  <p>
+    Marktdaten werden automatisch aktualisiert.
+    Keine Anlageberatung.
+  </p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
 </body>
 </html>
